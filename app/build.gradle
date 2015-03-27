@@ -9,9 +9,9 @@ buildscript {
         classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.+'
     }
 }
-
-apply plugin: 'com.android.application'
 apply plugin: 'android-sdk-manager'
+apply plugin: 'com.android.application'
+
 
 sdkManager {
     emulatorVersion 'android-19'
