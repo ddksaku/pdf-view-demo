@@ -5,6 +5,7 @@ package com.artifex.mupdfdemo;
  */
 
 
+    import android.annotation.SuppressLint;
     import android.content.Context;
     import android.graphics.Point;
     import android.graphics.PointF;
@@ -14,6 +15,7 @@ package com.artifex.mupdfdemo;
     import android.util.Base64;
     import android.view.MotionEvent;
     import android.view.View;
+    import android.webkit.JavascriptInterface;
     import android.webkit.WebView;
     import android.webkit.WebViewClient;
 
@@ -27,6 +29,7 @@ public class MuPDFReflowView extends WebView implements MuPDFView {
     AsyncTask<Void,Void,byte[]> mLoadHTML;
 
 
+    @SuppressLint("JavascriptInterface")
     public MuPDFReflowView(Context c, MuPDFCore core, Point parentSize) {
         super(c);
         mHandler = new Handler();
@@ -34,9 +37,10 @@ public class MuPDFReflowView extends WebView implements MuPDFView {
         mParentSize = parentSize;
         mContentHeight = parentSize.y;
         getSettings().setJavaScriptEnabled(true);
-        addJavascriptInterface(new Object(){
+
+        addJavascriptInterface(new Object() {
             public void reportContentHeight(String value) {
-                mContentHeight = (int)Float.parseFloat(value);
+                mContentHeight = (int) Float.parseFloat(value);
                 mHandler.post(new Runnable() {
                     public void run() {
                         requestLayout();

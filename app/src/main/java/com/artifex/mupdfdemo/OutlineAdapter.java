@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
@@ -42,7 +43,7 @@ public class OutlineAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View v;
         if (convertView == null) {
-            v = mInflater.inflate(R.layout.outline_entry, null);
+            v = mInflater.inflate(R.layout.outline_entry, parent,false);
         } else {
             v = convertView;
         }

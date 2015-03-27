@@ -232,6 +232,8 @@ public abstract class PageView extends ViewGroup {
     }
 
     public void setPage(int page, PointF size) {
+        final Paint paint = new Paint();
+
         // Cancel pending render task
         if (mDrawEntire != null) {
             mDrawEntire.cancel(true);
@@ -318,7 +320,7 @@ public abstract class PageView extends ViewGroup {
                     // Work out current total scale factor
                     // from source to view
                     final float scale = mSourceScale*(float)getWidth()/(float)mSize.x;
-                    final Paint paint = new Paint();
+
 
                     if (!mIsBlank && mSearchBoxes != null) {
                         paint.setColor(HIGHLIGHT_COLOR);

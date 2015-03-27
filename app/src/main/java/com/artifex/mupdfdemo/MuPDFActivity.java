@@ -635,7 +635,7 @@ public class MuPDFActivity extends Activity
             SharedPreferences prefs = getPreferences(Context.MODE_PRIVATE);
             SharedPreferences.Editor edit = prefs.edit();
             edit.putInt("page"+mFileName, mDocView.getDisplayedViewIndex());
-            edit.commit();
+            edit.apply();
         }
 
         if (!mButtonsVisible)
@@ -659,7 +659,7 @@ public class MuPDFActivity extends Activity
             SharedPreferences prefs = getPreferences(Context.MODE_PRIVATE);
             SharedPreferences.Editor edit = prefs.edit();
             edit.putInt("page"+mFileName, mDocView.getDisplayedViewIndex());
-            edit.commit();
+            edit.apply();
         }
     }
 
@@ -827,7 +827,7 @@ public class MuPDFActivity extends Activity
     }
 
     private void makeButtonsView() {
-        mButtonsView = getLayoutInflater().inflate(R.layout.buttons,null);
+       // mButtonsView = getLayoutInflater().inflate(R.layout.buttons,null);
         mFilenameView = (TextView)mButtonsView.findViewById(R.id.docNameText);
         mPageSlider = (SeekBar)mButtonsView.findViewById(R.id.pageSlider);
         mPageNumberView = (TextView)mButtonsView.findViewById(R.id.pageNumber);
