@@ -147,9 +147,9 @@ public class MuPDFReaderView extends ReaderView {
 
 
     public boolean onScaleBegin(ScaleGestureDetector d) {
-        // Disabled showing the buttons until next touch.
+        // Disabled showing the pdf_view_layout until next touch.
         // Not sure why this is needed, but without it
-        // pinch zoom can make the buttons appear
+        // pinch zoom can make the pdf_view_layout appear
         tapDisabled = true;
         return super.onScaleBegin(d);
     }
@@ -232,11 +232,6 @@ public class MuPDFReaderView extends ReaderView {
 
 
     protected void onChildSetup(int i, View v) {
-        if (SearchTaskResult.get() != null
-                && SearchTaskResult.get().pageNumber == i)
-            ((MuPDFView) v).setSearchBoxes(SearchTaskResult.get().searchBoxes);
-        else
-            ((MuPDFView) v).setSearchBoxes(null);
 
 
         ((MuPDFView) v).setLinkHighlighting(mLinksEnabled);
@@ -255,13 +250,7 @@ public class MuPDFReaderView extends ReaderView {
     }
 
 
-    protected void onMoveToChild(int i) {
-        if (SearchTaskResult.get() != null
-                && SearchTaskResult.get().pageNumber != i) {
-            SearchTaskResult.set(null);
-            resetupChildren();
-        }
-    }
+
 
 
     @Override

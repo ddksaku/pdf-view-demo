@@ -122,10 +122,7 @@ public class MuPDFPageView extends PageView implements MuPDFView {
     }
 
     public LinkInfo hitLink(float x, float y) {
-        // Since link highlighting was implemented, the super class
-        // PageView has had sufficient information to be able to
-        // perform this method directly. Making that change would
-        // make MuPDFCore.hitLinkPage superfluous.
+
         float scale = mSourceScale*(float)getWidth()/(float)mSize.x;
         float docRelX = (x - getLeft())/scale;
         float docRelY = (y - getTop())/scale;

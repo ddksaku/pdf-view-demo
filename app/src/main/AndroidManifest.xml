@@ -66,16 +66,8 @@
                 <data android:host="*"/>
             </intent-filter>
         </activity>
-        <activity
-            android:name=".OutlineActivity"
-            android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen"
-            android:label="@string/outline_title">
-        </activity>
-        <!--<activity-->
-            <!--android:name=".PrintDialogActivity"-->
-            <!--android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen"-->
-            <!--android:label="@string/print">-->
-        <!--</activity>-->
+
+
 
     </application>
 

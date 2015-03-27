@@ -65,7 +65,6 @@ public class MuPDFCore
     private native LinkInfo [] getPageLinksInternal(int page);
     private native RectF[] getWidgetAreasInternal(int page);
     private native Annotation[] getAnnotationsInternal(int page);
-    private native OutlineItem [] getOutlineInternal();
     private native boolean hasOutlineInternal();
     private native boolean needsPasswordInternal();
     private native boolean authenticatePasswordInternal(String password);
@@ -206,24 +205,6 @@ public class MuPDFCore
         return bm;
     }
 
-//
-//    public synchronized PassClickResult passClickEvent(int page, float x, float y) {
-//        boolean changed = passClickEventInternal(page, x, y) != 0;
-//
-//
-//        switch (WidgetType.values()[getFocusedWidgetTypeInternal()])
-//        {
-//            case TEXT:
-//                return new PassClickResultText(changed, getFocusedWidgetTextInternal());
-//            case LISTBOX:
-//            case COMBOBOX:
-//                return new PassClickResultChoice(changed, getFocusedWidgetChoiceOptions(), getFocusedWidgetChoiceSelected());
-//            default:
-//                return new PassClickResult(changed);
-//        }
-//
-//
-//    }
 
 
     public synchronized boolean setFocusedWidgetText(int page, String text) {
@@ -326,16 +307,6 @@ public class MuPDFCore
     public synchronized void deleteAnnotation(int page, int annot_index) {
         gotoPage(page);
         deleteAnnotationInternal(annot_index);
-    }
-
-
-    public synchronized boolean hasOutline() {
-        return hasOutlineInternal();
-    }
-
-
-    public synchronized OutlineItem [] getOutline() {
-        return getOutlineInternal();
     }
 
 

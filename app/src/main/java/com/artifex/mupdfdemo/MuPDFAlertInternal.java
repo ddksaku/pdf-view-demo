@@ -15,15 +15,6 @@ public class MuPDFAlertInternal {
     public int buttonPressed;
 
 
-    MuPDFAlertInternal(String aMessage, int aIconType, int aButtonGroupType, String aTitle, int aButtonPressed) {
-        message = aMessage;
-        iconType = aIconType;
-        buttonGroupType = aButtonGroupType;
-        title = aTitle;
-        buttonPressed = aButtonPressed;
-    }
-
-
     MuPDFAlertInternal(MuPDFAlert alert) {
         message = alert.message;
         iconType = alert.iconType.ordinal();
