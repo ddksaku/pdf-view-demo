@@ -1,5 +1,22 @@
-apply plugin: 'com.android.application'
+
 //apply plugin: 'android'
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:1.1.0'
+        classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.+'
+    }
+}
+
+apply plugin: 'com.android.application'
+apply plugin: 'android-sdk-manager'
+
+sdkManager {
+    emulatorVersion 'android-19'
+    emulatorArchitecture 'armeabi-v7a' // optional, defaults to arm
+}
 
 android {
     compileSdkVersion 21
@@ -27,4 +44,5 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.0.0'
+
 }

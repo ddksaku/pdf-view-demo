@@ -6,16 +6,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:1.1.0'
-        classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.+'
-
     }
-}
-apply plugin: 'android-sdk-manager'
-apply plugin: 'com.android.application'
-
-sdkManager {
-    emulatorVersion 'android-19'
-    emulatorArchitecture 'armeabi-v7a' // optional, defaults to arm
 }
 
 allprojects {
