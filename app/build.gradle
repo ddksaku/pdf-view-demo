@@ -14,7 +14,7 @@ apply plugin: 'com.android.application'
 
 
 sdkManager {
-    emulatorVersion 'android-19'
+    emulatorVersion 'android-20'
     emulatorArchitecture 'armeabi-v7a' // optional, defaults to arm
 }
 
