@@ -1,6 +1,6 @@
 # pdf-view-demo
 Demo from android-pdf-library
-
-1.Using FIlemanager to Select PDF
-2.Vertical Scroll view
+1.Android gradle integration with .so library
+2.Using Fileemanager to Select PDF
+3.Render PDF in Vertical Scroll Mode
 
