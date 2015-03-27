@@ -1,11 +1,5 @@
 package com.artifex.mupdfdemo;
 
-/**
- * Created by admin on 3/24/2015.
- */
-
-
-
 // Version of MuPDFAlert without enums to simplify JNI
 public class MuPDFAlertInternal {
     public final String message;
