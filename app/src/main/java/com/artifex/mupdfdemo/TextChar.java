@@ -1,18 +1,12 @@
 package com.artifex.mupdfdemo;
-/**
- * Created by admin on 3/24/2015.
- */
 
-
-        import android.graphics.RectF;
-
+import android.graphics.RectF;
 
 public class TextChar extends RectF {
-    public char c;
+	public char c;
 
-
-    public TextChar(float x0, float y0, float x1, float y1, char _c) {
-        super(x0, y0, x1, y1);
-        c = _c;
-    }
+	public TextChar(float x0, float y0, float x1, float y1, char _c) {
+		super(x0, y0, x1, y1);
+		c = _c;
+	}
 }

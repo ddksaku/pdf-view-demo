@@ -1,20 +1,14 @@
 package com.artifex.mupdfdemo;
 
-/**
- * Created by admin on 3/24/2015.
- */
 import android.graphics.RectF;
 
-
 public class LinkInfo {
-    final public RectF rect;
+	final public RectF rect;
 
+	public LinkInfo(float l, float t, float r, float b) {
+		rect = new RectF(l, t, r, b);
+	}
 
-    public LinkInfo(float l, float t, float r, float b) {
-        rect = new RectF(l, t, r, b);
-    }
-
-
-    public void acceptVisitor(LinkInfoVisitor visitor) {
-    }
+	public void acceptVisitor(LinkInfoVisitor visitor) {
+	}
 }

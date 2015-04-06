@@ -1,19 +1,14 @@
 package com.artifex.mupdfdemo;
 
-/**
- * Created by admin on 3/24/2015.
- */
 public class LinkInfoExternal extends LinkInfo {
-    final public String url;
+	final public String url;
 
+	public LinkInfoExternal(float l, float t, float r, float b, String u) {
+		super(l, t, r, b);
+		url = u;
+	}
 
-    public LinkInfoExternal(float l, float t, float r, float b, String u) {
-        super(l, t, r, b);
-        url = u;
-    }
-
-
-    public void acceptVisitor(LinkInfoVisitor visitor) {
-        visitor.visitExternal(this);
-    }
+	public void acceptVisitor(LinkInfoVisitor visitor) {
+		visitor.visitExternal(this);
+	}
 }

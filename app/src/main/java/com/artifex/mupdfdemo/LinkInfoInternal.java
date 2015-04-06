@@ -1,17 +1,14 @@
 package com.artifex.mupdfdemo;
 
-/**
- * Created by admin on 3/24/2015.
- */
 public class LinkInfoInternal extends LinkInfo {
-    final public int pageNumber;
+	final public int pageNumber;
 
-    public LinkInfoInternal(float l, float t, float r, float b, int p) {
-        super(l, t, r, b);
-        pageNumber = p;
-    }
+	public LinkInfoInternal(float l, float t, float r, float b, int p) {
+		super(l, t, r, b);
+		pageNumber = p;
+	}
 
-    public void acceptVisitor(LinkInfoVisitor visitor) {
-        visitor.visitInternal(this);
-    }
+	public void acceptVisitor(LinkInfoVisitor visitor) {
+		visitor.visitInternal(this);
+	}
 }
