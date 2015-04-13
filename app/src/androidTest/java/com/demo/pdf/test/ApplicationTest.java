@@ -6,6 +6,7 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.test.ActivityInstrumentationTestCase2;
 
@@ -13,12 +14,10 @@ import com.artifex.mupdfdemo.MuPDFActivity;
 import com.demo.pdf.MainActivity;
 import com.robotium.solo.Condition;
 import com.robotium.solo.Solo;
-
-
-import android.app.Application;
-import android.test.ApplicationTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
 import android.util.Log;
+import android.view.Display;
+import android.view.WindowManager;
 
 import junit.framework.Assert;
 
@@ -32,87 +31,127 @@ import java.io.OutputStream;
 public class ApplicationTest extends ActivityInstrumentationTestCase2<MainActivity> {
 
 
-        private Solo solo;
-        private static final String LAUNCHER_ACTIVITY_FULL_CLASSNAME = "com.demo.pdf.MainActivity";
-        private static final String TEST_FILE_NAME = "test.pdf";
-        final File originalScreenFile = new File(Environment.getExternalStorageDirectory() + "/Robotium-Screenshots/", "OriginalScreenshotFile" + ".jpg");
-        final File currentScreenFile = new File(Environment.getExternalStorageDirectory() + "/Robotium-Screenshots/", "CurrentScreenshotFile" + ".jpg");
-        final int TIMEOUT = 2000;
-        final String CURRENT_NAME = "CurrentScreenshotFile";
-        final String ORIGINAL_NAME = "OriginalScreenshotFile";
-        private static Class<?> MuPDFActivityClass;
-        Context context;
+    private Solo solo;
+    private static final String LAUNCHER_ACTIVITY_FULL_CLASSNAME = "com.artifex.mupdfdemo.MuPDFActivity";
+    private static final String TEST_FILE_NAME = "test.pdf";
 
-        static{
-            try {
-                MuPDFActivityClass = Class.forName(LAUNCHER_ACTIVITY_FULL_CLASSNAME);
-            } catch (ClassNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-        }
+    final String CURRENT_NAME_1 = "CurrentScreenshotFile_Page1";
+    final String ORIGINAL_NAME_1 = "OriginalScreenshotFile_Page1";
+    final String CURRENT_NAME_2 = "CurrentScreenshotFile_Page2";
+    final String ORIGINAL_NAME_2 = "OriginalScreenshotFile_Page2";
 
-        public ApplicationTest() throws ClassNotFoundException {
-            super(MainActivity.class);
-        }
+    final File originalScreenFile1 = new File(Environment.getExternalStorageDirectory() + "/Robotium-Screenshots/", ORIGINAL_NAME_1 + ".jpg");
+    final File currentScreenFile1 = new File(Environment.getExternalStorageDirectory() + "/Robotium-Screenshots/", CURRENT_NAME_1 + ".jpg");
 
-        @Override
-        public void setUp() throws Exception {
+    final File originalScreenFile2 = new File(Environment.getExternalStorageDirectory() + "/Robotium-Screenshots/", ORIGINAL_NAME_2 + ".jpg");
+    final File currentScreenFile2 = new File(Environment.getExternalStorageDirectory() + "/Robotium-Screenshots/", CURRENT_NAME_2 + ".jpg");
+    final int TIMEOUT = 2000;
+    int deviceWidth;
+    int deviceHeight;
+    private static Class<?> MuPDFActivityClass;
+    Context context;
 
-            super.setUp();
-
-            solo = new Solo(getInstrumentation(),getActivity());
-            context = this.getInstrumentation().getTargetContext().getApplicationContext();
-
-            copyAssets();
-
-         //   String path = "/storage/emulated/0/Android/data/com.demo.pdf/files/test.pdf";
-            String path = Environment.getExternalStorageDirectory().toString() +"/"+ TEST_FILE_NAME;
-            Uri uri = Uri.parse(path);
-            if(currentScreenFile.exists()){
-                currentScreenFile.delete();
-            }
-
-            Intent intent = new Intent(getActivity().getApplicationContext(), MuPDFActivity.class);
-            intent.setAction(Intent.ACTION_VIEW);
-            intent.setData(uri);
-
-
-            setActivityIntent(intent);
-            getActivity().startActivity(intent);
-            solo.waitForActivity(MuPDFActivity.class);
-            solo.sleep(2000);
-
-        }
-        @Override
-        public void tearDown() throws Exception {
-            solo.finishOpenedActivities();
-            super.tearDown();
-        }
-
-        @SmallTest
-        public void testStartRun() {
-            final int TIMEOUT = 1000;
-
-            if(originalScreenFile.exists()){
-                solo.takeScreenshot(CURRENT_NAME);
-                compareScreenShot();
-            }else{
-                solo.takeScreenshot(ORIGINAL_NAME);
-            }
-        }
-
-    private void compareScreenShot() {
-         //wait for screenshot
-         assertTrue(solo.waitForCondition(new Condition() {
-                @Override
-                public boolean isSatisfied() {
-                    return currentScreenFile.exists();
-                }
-            }, TIMEOUT));
-
+    static {
         try {
-            Bitmap originalBmp = BitmapFactory.decodeFile(originalScreenFile.getPath());
-            Bitmap currentBmp = BitmapFactory.decodeFile(currentScreenFile.getPath());
+            MuPDFActivityClass = Class.forName(LAUNCHER_ACTIVITY_FULL_CLASSNAME);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public ApplicationTest() throws ClassNotFoundException {
+        super(MainActivity.class);
+    }
+
+    @Override
+    public void setUp() throws Exception {
+
+        super.setUp();
+
+        solo = new Solo(getInstrumentation(), getActivity());
+        context = this.getInstrumentation().getTargetContext().getApplicationContext();
+        //copy test.pdf from asset to sdcard of emulator
+        copyAssets();
+
+        String path = Environment.getExternalStorageDirectory().toString() + "/" + TEST_FILE_NAME;
+        Uri uri = Uri.parse(path);
+
+        Display display = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        deviceWidth = display.getWidth();
+        deviceHeight = display.getHeight();
+
+        //remove first page history image.
+        if (currentScreenFile1.exists()) {
+            currentScreenFile1.delete();
+        }
+        //remove second page history image.
+        if (currentScreenFile2.exists()) {
+            currentScreenFile2.delete();
+        }
+
+
+        Intent intent = new Intent(getActivity().getApplicationContext(), MuPDFActivity.class);
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setData(uri);
+
+
+        setActivityIntent(intent);
+        getActivity().startActivity(intent);
+        solo.waitForActivity(MuPDFActivity.class);
+        solo.sleep(TIMEOUT);
+
+    }
+
+    @Override
+    public void tearDown() throws Exception {
+        solo.finishOpenedActivities();
+        super.tearDown();
+    }
+
+    @SmallTest
+    public void testStartRun() {
+
+        //first page test
+        if (originalScreenFile1.exists()) {
+            solo.takeScreenshot(CURRENT_NAME_1);
+        } else {
+            solo.takeScreenshot(ORIGINAL_NAME_1);
+        }
+
+        //scroll to next page.
+
+        final float fromX = deviceWidth / 2;
+        float toX = fromX;
+        final float fromY = deviceHeight / 2;
+        float toY = deviceHeight / 4;
+        solo.drag(fromX,toX,fromY,toY,1);
+
+        solo.sleep(TIMEOUT);
+        if (originalScreenFile2.exists()) {
+            solo.takeScreenshot(CURRENT_NAME_2);
+        } else {
+            solo.takeScreenshot(ORIGINAL_NAME_2);
+        }
+        solo.sleep(TIMEOUT);
+        compare();
+    }
+
+
+    public void compare() {
+        if ((originalScreenFile1.exists()) && (currentScreenFile1.exists())) {
+            assertTrue("First Image Matched", compareScreenShot(originalScreenFile1, currentScreenFile1));
+        }
+
+        if ((originalScreenFile2.exists()) && (currentScreenFile2.exists())) {
+            assertTrue("Next Image Matched", compareScreenShot(originalScreenFile2, currentScreenFile2));
+        }
+    }
+
+    //compare two jpeg files
+    private boolean compareScreenShot(File file1, File file2) {
+        try {
+            Bitmap originalBmp = BitmapFactory.decodeFile(file1.getPath());
+            Bitmap currentBmp = BitmapFactory.decodeFile(file2.getPath());
 
             int width1 = originalBmp.getWidth();
             int width2 = currentBmp.getWidth();
@@ -129,11 +168,11 @@ public class ApplicationTest extends ActivityInstrumentationTestCase2<MainActivi
                     int rgb1 = originalBmp.getPixel(x, y);
                     int rgb2 = currentBmp.getPixel(x, y);
                     int r1 = (rgb1 >> 16) & 0xff;
-                    int g1 = (rgb1 >>  8) & 0xff;
-                    int b1 = (rgb1      ) & 0xff;
+                    int g1 = (rgb1 >> 8) & 0xff;
+                    int b1 = (rgb1) & 0xff;
                     int r2 = (rgb2 >> 16) & 0xff;
-                    int g2 = (rgb2 >>  8) & 0xff;
-                    int b2 = (rgb2      ) & 0xff;
+                    int g2 = (rgb2 >> 8) & 0xff;
+                    int b2 = (rgb2) & 0xff;
                     diff += Math.abs(r1 - r2);
                     diff += Math.abs(g1 - g2);
                     diff += Math.abs(b1 - b2);
@@ -141,14 +180,17 @@ public class ApplicationTest extends ActivityInstrumentationTestCase2<MainActivi
             }
             double n = width1 * height1 * 3;
             double p = diff / n / 255.0;
-            Assert.assertTrue(p * 100 < 5 );
+            //0 = < p < = 1
+            //the smaller p is , the correctly images match
+            return (p < 10);
 
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return true;
     }
-    //http://rosettacode.org/wiki/Percentage_difference_between_images
+
     private void copyAssets() {
             AssetManager assetManager = context.getAssets();
             String[] files = null;

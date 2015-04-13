@@ -33,8 +33,8 @@ public class ReaderView
 	private static final float MIN_SCALE        = 1.0f;
 	private static final float MAX_SCALE        = 5.0f;
 	private static final float REFLOW_SCALE_FACTOR = 0.5f;
-
-	private static final boolean HORIZONTAL_SCROLLING = true;
+    //change the scroll direction
+	private static final boolean HORIZONTAL_SCROLLING = false;
 
 	private Adapter           mAdapter;
 	private int               mCurrent;    // Adapter's index for the current view
