@@ -1,7 +1,7 @@
 
-#* Gradle based PDF Vertical Scrollview Demo Project*
+# Gradle based PDF Vertical Scrollview Demo Project#
 
-This is demo project for android-mupdf-library(gradle).
+This is demo project for android-pdf-library(gradle)(www.github.com/ddksaku/android-pdf-library).
 The project is using  mupdf.so built by above project.
 
 **Features**

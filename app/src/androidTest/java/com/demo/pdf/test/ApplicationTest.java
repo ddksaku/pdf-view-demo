@@ -27,7 +27,6 @@ public class ApplicationTest extends ActivityInstrumentationTestCase2<MainActivi
 
 
     private Solo solo;
-    private static final String LAUNCHER_ACTIVITY_FULL_CLASSNAME = "com.artifex.mupdfdemo.MuPDFActivity";
     private static final String TEST_FILE_NAME = "test.pdf";
 
     final String CURRENT_NAME_1 = "CurrentScreenshotFile_Page1";
@@ -166,8 +165,8 @@ public class ApplicationTest extends ActivityInstrumentationTestCase2<MainActivi
             }
             double n = width1 * height1 * 3;
             double p = diff / n / 255.0;
-            //0 = < p < = 1
-            //the smaller p is , the correctly images match
+                //0 = < p < = 1
+                //the smaller p is , the correctly images match
             return (p < 10);
 
 
@@ -176,7 +175,7 @@ public class ApplicationTest extends ActivityInstrumentationTestCase2<MainActivi
         }
         return true;
     }
-        //COPY assets from assets holder to sdcard
+        //copy assets from assets holder to sdcard
     private void copyAssets() {
         AssetManager assetManager = context.getAssets();
         String[] files = null;
@@ -223,5 +222,4 @@ public class ApplicationTest extends ActivityInstrumentationTestCase2<MainActivi
             out.write(buffer, 0, read);
         }
     }
-
 }
