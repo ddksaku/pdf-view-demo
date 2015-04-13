@@ -3,6 +3,7 @@ package com.artifex.mupdfdemo;
 import java.util.ArrayList;
 
 import com.artifex.mupdfdemo.MuPDFCore.Cookie;
+import com.demo.pdf.R;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;

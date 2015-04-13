@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.util.concurrent.Executor;
 
 import com.artifex.mupdfdemo.ReaderView.ViewMapper;
+import com.demo.pdf.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;

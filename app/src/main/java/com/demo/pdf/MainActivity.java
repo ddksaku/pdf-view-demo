@@ -15,7 +15,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.artifex.mupdfdemo.MuPDFActivity;
-import com.artifex.mupdfdemo.R;
+
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -36,34 +36,49 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
 
 //        setContentView(R.layout.activity_main);
+            setContentView(R.layout.activity_main);
 
-          intent = new Intent(this, MuPDFActivity.class);
-          copyAssets();
+            Button showPDFBtn = (Button)findViewById(R.id.btn_show_pdf);
+            showPDFBtn.setOnClickListener(new View.OnClickListener() {
+                     @Override
+                     public void onClick(View view) {
+                            openFileBrowser();
+                         }
+                 });
+         }
 
-         intent.setAction(Intent.ACTION_VIEW);
+    private void openFileBrowser() {
+        Intent fileintent = new Intent(Intent.ACTION_GET_CONTENT);
+        fileintent.setType("application/pdf");
+        try {
+            startActivityForResult(fileintent, PICKFILE_RESULT_CODE);
+        } catch (ActivityNotFoundException e) {
+            Log.e("tag", "No activity can handle picking a file. Showing alternatives.");
+        }
+    }
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // TODO Fix no activity available
+        if (data == null)
+            return;
+        switch (requestCode) {
+            case PICKFILE_RESULT_CODE:
+                if (resultCode == RESULT_OK) {
+                    String FilePath = data.getData().getPath();
+                    //FilePath is your file as a string
+                    showPdfContent(FilePath);
+                }
+        }
+    }
+    private void showPdfContent(String filePath) {
 
-         fileUri = Uri.parse(outFile.getAbsolutePath());
-         intent.setData(fileUri);
-
-        intent.putExtra("password", "PDF document password");
-
-                //if you need highlight link boxes
-        intent.putExtra("linkhighlight", true);
-
-        //if you don't need device sleep on reading document
-        intent.putExtra("idleenabled", false);
+        Uri uri = Uri.parse(filePath);
 
 
-        //document name
-        intent.putExtra("docname", "PDF document file name");
-
+        Intent intent = new Intent(this, MuPDFActivity.class);
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setData(uri);
         startActivity(intent);
-
-//            }
-//        });
-
-
-}
+    }
     public static File getFilesDirectory(Context context) {
         File appFilesDir = null;
         if (Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
