@@ -6,21 +6,16 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Environment;
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.artifex.mupdfdemo.MuPDFActivity;
 import com.demo.pdf.MainActivity;
-import com.robotium.solo.Condition;
 import com.robotium.solo.Solo;
 import android.test.suitebuilder.annotation.SmallTest;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
-
-import junit.framework.Assert;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -42,22 +37,14 @@ public class ApplicationTest extends ActivityInstrumentationTestCase2<MainActivi
 
     final File originalScreenFile1 = new File(Environment.getExternalStorageDirectory() + "/Robotium-Screenshots/", ORIGINAL_NAME_1 + ".jpg");
     final File currentScreenFile1 = new File(Environment.getExternalStorageDirectory() + "/Robotium-Screenshots/", CURRENT_NAME_1 + ".jpg");
-
     final File originalScreenFile2 = new File(Environment.getExternalStorageDirectory() + "/Robotium-Screenshots/", ORIGINAL_NAME_2 + ".jpg");
     final File currentScreenFile2 = new File(Environment.getExternalStorageDirectory() + "/Robotium-Screenshots/", CURRENT_NAME_2 + ".jpg");
     final int TIMEOUT = 2000;
     int deviceWidth;
     int deviceHeight;
-    private static Class<?> MuPDFActivityClass;
+
     Context context;
 
-    static {
-        try {
-            MuPDFActivityClass = Class.forName(LAUNCHER_ACTIVITY_FULL_CLASSNAME);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public ApplicationTest() throws ClassNotFoundException {
         super(MainActivity.class);
@@ -70,16 +57,31 @@ public class ApplicationTest extends ActivityInstrumentationTestCase2<MainActivi
 
         solo = new Solo(getInstrumentation(), getActivity());
         context = this.getInstrumentation().getTargetContext().getApplicationContext();
-        //copy test.pdf from asset to sdcard of emulator
+            //copy test.pdf from asset to sdcard of emulator
         copyAssets();
-
+        clearHistory();
+        getDeviceProperty();
+            //set target file path
         String path = Environment.getExternalStorageDirectory().toString() + "/" + TEST_FILE_NAME;
         Uri uri = Uri.parse(path);
+        Intent intent = new Intent(getActivity().getApplicationContext(), MuPDFActivity.class);
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setData(uri);
+        setActivityIntent(intent);
+        getActivity().startActivity(intent);
 
+        solo.waitForActivity(MuPDFActivity.class);
+        solo.sleep(TIMEOUT);
+
+    }
+
+    private void getDeviceProperty() {
         Display display = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         deviceWidth = display.getWidth();
         deviceHeight = display.getHeight();
+    }
 
+    private void clearHistory() {
         //remove first page history image.
         if (currentScreenFile1.exists()) {
             currentScreenFile1.delete();
@@ -88,17 +90,6 @@ public class ApplicationTest extends ActivityInstrumentationTestCase2<MainActivi
         if (currentScreenFile2.exists()) {
             currentScreenFile2.delete();
         }
-
-
-        Intent intent = new Intent(getActivity().getApplicationContext(), MuPDFActivity.class);
-        intent.setAction(Intent.ACTION_VIEW);
-        intent.setData(uri);
-
-
-        setActivityIntent(intent);
-        getActivity().startActivity(intent);
-        solo.waitForActivity(MuPDFActivity.class);
-        solo.sleep(TIMEOUT);
 
     }
 
@@ -110,16 +101,13 @@ public class ApplicationTest extends ActivityInstrumentationTestCase2<MainActivi
 
     @SmallTest
     public void testStartRun() {
-
         //first page test
         if (originalScreenFile1.exists()) {
             solo.takeScreenshot(CURRENT_NAME_1);
         } else {
             solo.takeScreenshot(ORIGINAL_NAME_1);
         }
-
-        //scroll to next page.
-
+             //scroll to next page.
         final float fromX = deviceWidth / 2;
         float toX = fromX;
         final float fromY = deviceHeight / 2;
@@ -135,7 +123,6 @@ public class ApplicationTest extends ActivityInstrumentationTestCase2<MainActivi
         solo.sleep(TIMEOUT);
         compare();
     }
-
 
     public void compare() {
         if ((originalScreenFile1.exists()) && (currentScreenFile1.exists())) {
@@ -161,7 +148,6 @@ public class ApplicationTest extends ActivityInstrumentationTestCase2<MainActivi
                 System.err.println("Error: Images dimensions mismatch");
                 System.exit(1);
             }
-
             long diff = 0;
             for (int y = 0; y < height1; y++) {
                 for (int x = 0; x < width1; x++) {
@@ -190,52 +176,52 @@ public class ApplicationTest extends ActivityInstrumentationTestCase2<MainActivi
         }
         return true;
     }
-
+        //COPY assets from assets holder to sdcard
     private void copyAssets() {
-            AssetManager assetManager = context.getAssets();
-            String[] files = null;
-            try {
-                files = assetManager.list("");
-            } catch (IOException e) {
-                Log.e("tag", "Failed to get asset file list.", e);
-            }
+        AssetManager assetManager = context.getAssets();
+        String[] files = null;
+        try {
+            files = assetManager.list("");
+        } catch (IOException e) {
+            Log.e("tag", "Failed to get asset file list.", e);
+        }
 
-            for(String filename : files) {
-                if (filename.compareTo(TEST_FILE_NAME) == 0) {
-                    InputStream in = null;
-                    OutputStream out = null;
-                    try {
-                        in = assetManager.open(filename);
-                        File outFile = new File(Environment.getExternalStorageDirectory().toString(), filename);
-                        out = new FileOutputStream(outFile);
-                        copyFile(in, out);
-                    } catch (IOException e) {
-                        Log.e("tag", "Failed to copy asset file: " + filename, e);
-                    } finally {
-                        if (in != null) {
-                            try {
-                                in.close();
-                            } catch (IOException e) {
-                                // NOOP
-                            }
+        for(String filename : files) {
+            if (filename.compareTo(TEST_FILE_NAME) == 0) {
+                InputStream in = null;
+                OutputStream out = null;
+                try {
+                    in = assetManager.open(filename);
+                    File outFile = new File(Environment.getExternalStorageDirectory().toString(), filename);
+                    out = new FileOutputStream(outFile);
+                    copyFile(in, out);
+                } catch (IOException e) {
+                    Log.e("tag", "Failed to copy asset file: " + filename, e);
+                } finally {
+                    if (in != null) {
+                        try {
+                            in.close();
+                        } catch (IOException e) {
+                            // NOOP
                         }
-                        if (out != null) {
-                            try {
-                                out.close();
-                            } catch (IOException e) {
-                            }
+                    }
+                    if (out != null) {
+                        try {
+                            out.close();
+                        } catch (IOException e) {
                         }
                     }
                 }
             }
         }
+    }
 
-        private void copyFile(InputStream in, OutputStream out) throws IOException {
-            byte[] buffer = new byte[1024];
-            int read;
-            while((read = in.read(buffer)) != -1){
-                out.write(buffer, 0, read);
-            }
+    private void copyFile(InputStream in, OutputStream out) throws IOException {
+        byte[] buffer = new byte[1024];
+        int read;
+        while((read = in.read(buffer)) != -1){
+            out.write(buffer, 0, read);
         }
+    }
 
 }

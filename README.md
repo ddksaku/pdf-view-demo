@@ -1,6 +1,16 @@
-# pdf-view-demo
-Demo from android-pdf-library
-1.Android gradle integration with .so library
-2.Using Fileemanager to Select PDF
-3.Render PDF in Vertical Scroll Mode
+
+#* Gradle based PDF Vertical Scrollview Demo Project*
+
+This is demo project for android-mupdf-library(gradle).
+The project is using  mupdf.so built by above project.
+
+**Features**
+- Pick file from file browser and Render
+- Swipe page via Vertical Drag
+
+**Improvement**
+- Android Robotium test added
+- All Building mechanism are Gradle based.
+
+
 
