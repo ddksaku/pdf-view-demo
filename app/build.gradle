@@ -13,9 +13,7 @@ android {
 
 
     }
-    defaultConfig {
-        testPackageName:"com.demo.pdf.androidTest"
-    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -27,9 +25,10 @@ android {
         jniLibs.srcDir 'src/main/libs'
     }
     sourceSets {
-        instrumentTest.setRoot('src/androidTest/')
+        androidTest.setRoot('src/androidTest/')
     }
     lintOptions {
+        checkReleaseBuilds false
         abortOnError false
     }
 }
