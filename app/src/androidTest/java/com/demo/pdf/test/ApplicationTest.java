@@ -167,7 +167,7 @@ public class ApplicationTest extends ActivityInstrumentationTestCase2<MainActivi
             double p = diff / n / 255.0;
                 //0 = < p < = 1
                 //the smaller p is , the correctly images match
-            return (p < 10);
+            return (p < 0.1);
 
 
         } catch (Exception e) {
