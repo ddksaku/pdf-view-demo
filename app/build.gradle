@@ -13,6 +13,9 @@ android {
 
 
     }
+    defaultConfig {
+        testPackageName:"com.demo.pdf.androidTest"
+    }
     buildTypes {
         release {
             minifyEnabled false
