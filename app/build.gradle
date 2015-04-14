@@ -26,6 +26,11 @@ android {
     }
     sourceSets {
         androidTest.setRoot('src/androidTest/')
+        integrationTest {
+            // Gives you access to the compiled classes in your tests
+            compileClasspath += main.output
+            runtimeClasspath += main.output
+        }
     }
     lintOptions {
         checkReleaseBuilds false
@@ -38,4 +43,8 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.0.0'
     testCompile 'junit:junit:4.12'
     androidTestCompile 'com.jayway.android.robotium:robotium-solo:5.2.1'
+}
+task integrationTest(type: Test) {
+    testClassesDir = sourceSets.integrationTest.output.classesDir
+    classpath = sourceSets.integrationTest.runtimeClasspath
 }
